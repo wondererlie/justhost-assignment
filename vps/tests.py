@@ -94,3 +94,13 @@ def test_vps_list_and_filters():
     )
 
     create_vps_filter_request(client, create_vps(client, stub=VPSFactory.stub(cpu=4, ram=2048, hdd=300)), "?&hdd=300")
+
+
+@pytest.mark.django_db
+def test_vps_removing():
+    client = APIClient()
+    vps = create_vps(client)
+    assert VPS.objects.filter().count() == 1
+    response = client.delete(reverse(READ_VPS_ENDPOINT, kwargs={"pk": vps["uid"]}))
+    assert response.status_code == status.HTTP_204_NO_CONTENT
+    assert VPS.objects.filter().count() == 0
