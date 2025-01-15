@@ -1,13 +1,17 @@
 from rest_framework import status, viewsets
 from rest_framework.response import Response
+from django_filters import rest_framework as filters
 
 from vps.models import VPS
 from vps.serializers import VPSSerializer
+from vps.filters import VPSFilter
 
 
 class VPSViewSet(viewsets.ModelViewSet):
     queryset = VPS.objects.all()
     serializer_class = VPSSerializer
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_class = VPSFilter
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
