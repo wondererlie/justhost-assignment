@@ -1,0 +1,318 @@
+openapi: 3.0.3
+info:
+  title: JustHost Assignment
+  version: 1.0.0
+paths:
+  /api/vps/:
+    get:
+      operationId: api_vps_list
+      parameters:
+      - in: query
+        name: cpu
+        schema:
+          type: integer
+      - in: query
+        name: cpu__gt
+        schema:
+          type: integer
+      - in: query
+        name: cpu__gte
+        schema:
+          type: integer
+      - in: query
+        name: cpu__lt
+        schema:
+          type: integer
+      - in: query
+        name: cpu__lte
+        schema:
+          type: integer
+      - in: query
+        name: hdd
+        schema:
+          type: integer
+      - in: query
+        name: hdd__gt
+        schema:
+          type: integer
+      - in: query
+        name: hdd__gte
+        schema:
+          type: integer
+      - in: query
+        name: hdd__lt
+        schema:
+          type: integer
+      - in: query
+        name: hdd__lte
+        schema:
+          type: integer
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: ram
+        schema:
+          type: integer
+      - in: query
+        name: ram__gt
+        schema:
+          type: integer
+      - in: query
+        name: ram__gte
+        schema:
+          type: integer
+      - in: query
+        name: ram__lt
+        schema:
+          type: integer
+      - in: query
+        name: ram__lte
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedVPSList'
+          description: ''
+    post:
+      operationId: api_vps_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VPS'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/VPS'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/VPS'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VPS'
+          description: ''
+  /api/vps/{uid}/:
+    get:
+      operationId: api_vps_retrieve
+      parameters:
+      - in: path
+        name: uid
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this VPS Server.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VPS'
+          description: ''
+    put:
+      operationId: api_vps_update
+      parameters:
+      - in: path
+        name: uid
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this VPS Server.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VPS'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/VPS'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/VPS'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VPS'
+          description: ''
+    patch:
+      operationId: api_vps_partial_update
+      parameters:
+      - in: path
+        name: uid
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this VPS Server.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedVPS'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedVPS'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedVPS'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VPS'
+          description: ''
+    delete:
+      operationId: api_vps_destroy
+      parameters:
+      - in: path
+        name: uid
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this VPS Server.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+components:
+  schemas:
+    PaginatedVPSList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/VPS'
+    PatchedVPS:
+      type: object
+      properties:
+        uid:
+          type: string
+          format: uuid
+          readOnly: true
+        cpu:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        ram:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        hdd:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        status:
+          $ref: '#/components/schemas/StatusEnum'
+    StatusEnum:
+      enum:
+      - started
+      - blocked
+      - stopped
+      type: string
+      description: |-
+        * `started` - Started
+        * `blocked` - Blocked
+        * `stopped` - Stopped
+    VPS:
+      type: object
+      properties:
+        uid:
+          type: string
+          format: uuid
+          readOnly: true
+        cpu:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        ram:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        hdd:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        status:
+          $ref: '#/components/schemas/StatusEnum'
+      required:
+      - cpu
+      - hdd
+      - ram
+      - status
+      - uid
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
