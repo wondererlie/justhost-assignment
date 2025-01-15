@@ -7,7 +7,7 @@ class VPSFilter(filters.FilterSet):
     class Meta:
         model = VPS
         fields = {
-            'cpu': ['exact', 'lt', 'lte', 'gt', 'gte'],
-            'ram': ['exact', 'lt', 'lte', 'gt', 'gte'],
-            'hdd': ['exact', 'lt', 'lte', 'gt', 'gte'],
+            "cpu": ["exact", "lt", "lte", "gt", "gte"],
+            "ram": ["exact", "lt", "lte", "gt", "gte"],
+            "hdd": ["exact", "lt", "lte", "gt", "gte"],
         }

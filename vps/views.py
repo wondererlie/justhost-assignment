@@ -1,10 +1,10 @@
+from django_filters import rest_framework as filters
 from rest_framework import status, viewsets
 from rest_framework.response import Response
-from django_filters import rest_framework as filters
 
+from vps.filters import VPSFilter
 from vps.models import VPS
 from vps.serializers import VPSSerializer
-from vps.filters import VPSFilter
 
 
 class VPSViewSet(viewsets.ModelViewSet):
